@@ -1,0 +1,13 @@
+<! -- наследование шаблона default -->
+{% extends 'flatpages/default.html' %}
+
+{% block title %} About Us {% endblock title %}
+
+<! -- начало контента -->
+{% block content %}
+
+<h1>About Us</h1>
+{{ flatpage.content }}
+
+<! -- конец контента -->
+{% endblock content %}
