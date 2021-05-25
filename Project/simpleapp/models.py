@@ -12,10 +12,11 @@ class Product(models.Model):
     )
     # описание товара
     description = models.TextField()
+
     # количество товара
     quantity = models.IntegerField(
         # проверка значения, чтобы оно было >= 0
-        validators=[MinValueValidator(0)],
+        validators=[MinValueValidator(0, 'Quantity should be >= 0')] # количество товара на складе д/б больше нуля
     )
 
     # связь «один ко многим» с моделью Category
@@ -37,6 +38,10 @@ class Product(models.Model):
     # формат вывода наименования товара и его описания (первые 20 знаков)
     def __str__(self):
         return f'{self.name.title()}: {self.description[:20]}'
+
+    # формат вывода наименования товара и его количества
+    def __dir__(self):
+        return f'{self.name}{self.quantity}'
 
 
 # Создаем модель категории товаров

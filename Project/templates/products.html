@@ -1,13 +1,67 @@
 <! -- наследование шаблона default -->
 {% extends 'flatpages/default.html' %}
 
-{% block title %} Products {% endblock title %}
+<! -- загрузим собственные фильтры -->
+{% load custom_filters %}
+
+
+    <! -- заголовок сайта -->
+{% block title %}
+Products
+{% endblock title %}
+    <! -- конец заголовка сайта -->
+
 
 <! -- начало контента -->
 {% block content %}
 
-<h1>Все товары</h1>
-{{ products }}
+    <h1>Все товары</h1>
+    <hr> {# это отступ #}
+    <h3>{{ time_now|date:'M d Y' }}</h3>            {# ------ текущее время: отобразим только мес, день, год -------------- #}
+    <h3>{{ value1|default_if_none:"ничего" }}</h3>  {# ------ default_if_none возвращает "ничего", если value1 = None ----- #}
+    {% if products %}                               {# ------ если продукты есть ------------------------------------------ #}
+            <table>
+                <tr>
+                    <td>
+                        Название
+                    </td>
+                    <td>
+                        Описание
+                    </td>
+                    <td>
+                        Категория
+                    </td>
+                    <td>
+                        Цена
+                    </td>
+                    <td>
+                        Количество
+                    </td>
+                </tr>
+            {% for product in products %}
+                <tr>
+                    <td>
+                        {{ product.name|multiply:1 }} {# ------ доступ к полю name в переменной product  ------ #}
+                                                      {# ------ применим собственный фильтр к полю name  ------ #}
+                    </td>
+                    <td>
+                        {{ product.description|truncatewords:2 }} {# ------ ограничим количество отображаемых слов ---- #}
+                    </td>
+                    <td>
+                        {{ product.category.name }}
+                    </td>
+                    <td>
+                        {{ product.price }}
+                    </td>
+                    <td>
+                        {{ product.quantity }}
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}         {# --- если их нет, то выводим сообщение --- #}
+        <h2>Товаров нет!</h2>
+    {% endif %}
 
 <! -- конец контента -->
 {% endblock content %}
